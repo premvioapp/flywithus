@@ -4,8 +4,8 @@
 // Your token stays private here: visitors can never see this code.
 
 // 1. PASTE YOUR DETAILS HERE (keep the quotes)
-const BOT_TOKEN = "PASTE_YOUR_BOT_TOKEN_HERE";
-const CHAT_ID   = "PASTE_YOUR_CHAT_ID_HERE";
+const BOT_TOKEN = "9197262737:AAH2FfbUt8oot_y0--grYfimIU1xugfQqhM";
+const CHAT_ID   = "9197262737";
 
 // Websites allowed to send bookings (any *.github.io address is also allowed)
 const ALLOWED = ["https://airtaxinepal.org", "https://www.airtaxinepal.org"];
