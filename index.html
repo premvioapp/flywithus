@@ -137,6 +137,7 @@
   .note{font-size:.82rem;text-align:center;margin:12px 0 0;opacity:.8}
   .form-msg{display:none;margin-top:12px;padding:12px 14px;border-radius:12px;background:#FFE3EE;color:var(--magenta);font-weight:600;font-size:.9rem}
   .form-msg.show{display:block}
+  .form-msg a{color:var(--plum);font-weight:700}
 
   /* success state */
   .done{display:none;padding:34px 28px 32px;text-align:center}
@@ -298,7 +299,6 @@
   .lb-prev{left:16px;top:50%;transform:translateY(-50%)}
   .lb-next{right:16px;top:50%;transform:translateY(-50%)}
 
-  .credits{max-width:760px;margin:16px auto 0;font-size:.74rem;opacity:.7;line-height:1.6}
 
   @media (max-width:960px){
     .hero-photo::after{background:linear-gradient(180deg,rgba(255,240,245,.93) 0%,rgba(255,240,245,.8) 40%,rgba(255,240,245,.5) 72%,#FFF0F5 100%)}
@@ -556,23 +556,22 @@
     <span>airtaxinepal<small>.org</small></span>
   </a>
   <div>Domestic flight tickets across Nepal · © <span id="yr"></span> Air Taxi Nepal</div>
-  <p class="credits" id="credits"></p>
 </footer>
 
 <script>
 /* =========================================================
-   TELEGRAM SETTINGS — fill these in
-   Option A (simple): put BOT_TOKEN and CHAT_ID here.
-     Note: anyone can read them in the page source.
-   Option B (safer, works with GitHub Pages): deploy
-     telegram-worker.js on Cloudflare Workers (free), then put
-     the worker URL in PROXY_URL and leave BOT_TOKEN empty.
+   SETTINGS
+   Telegram is blocked inside Nepal, so bookings are sent through
+   your free Cloudflare Worker (telegram-worker.js). Put the
+   bot token and chat ID inside the WORKER, not here.
    ========================================================= */
 const CONFIG = {
-  BOT_TOKEN: "9197262737:AAH2FfbUt8oot_y0--grYfimIU1xugfQqhM",
-  CHAT_ID:   "9197262737",
-  WHATSAPP_NUMBER: "",  // optional, your number with country code, e.g. "9779812345678" (shows a chat button)
-  PROXY_URL: ""   // e.g. "https://airtaxi-telegram.yourname.workers.dev"
+  PROXY_URL: "PASTE_YOUR_WORKER_URL_HERE",  // e.g. "https://airtaxi-booking.yourname.workers.dev"
+  WHATSAPP_NUMBER: "",  // optional, e.g. "9779812345678": shows a chat button and a backup "send on WhatsApp" option
+
+  // Only used if PROXY_URL is empty (works only outside Nepal):
+  BOT_TOKEN: "",
+  CHAT_ID: ""
 };
 
 const AIRPORTS = [
@@ -719,10 +718,10 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">"
 const prettyDate = v => new Date(v + "T00:00:00").toLocaleDateString("en-GB", { weekday:"short", day:"numeric", month:"short", year:"numeric" });
 
 async function sendToTelegram(d){
-  if (CONFIG.PROXY_URL) {
+  if (CONFIG.PROXY_URL && !CONFIG.PROXY_URL.startsWith("PASTE")) {
     const r = await fetch(CONFIG.PROXY_URL, { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(d) });
     const j = await r.json().catch(() => ({}));
-    if (!r.ok || !j.ok) throw new Error("proxy");
+    if (!r.ok || !j.ok) throw new Error("Worker error: " + (j.error || r.status));
     return;
   }
   const waDigits = (d.cc + d.phone).replace(/\D/g, "");
@@ -741,6 +740,7 @@ Ref: <b>${d.ref}</b>  |  airtaxinepal.org
 <b>Passengers:</b> ${d.pax}
 --------------------------------
 <i>Sent ${esc(new Date().toLocaleString("en-GB"))}</i>`;
+  if (!CONFIG.BOT_TOKEN) throw new Error("Setup: PROXY_URL is not set in index.html");
   const r = await fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
     method:"POST", headers:{ "Content-Type":"application/json" },
     body: JSON.stringify({ chat_id: CONFIG.CHAT_ID, text, parse_mode:"HTML", disable_web_page_preview:true })
@@ -783,8 +783,12 @@ $("bookingForm").addEventListener("submit", async e => {
     $("book").classList.add("sent");
     $("done").focus({ preventScroll: true });
   } catch (err) {
-    console.error(err);
-    msg.textContent = "Your request didn’t go through. Check your internet connection and try again.";
+    console.error("Booking not sent:", err);
+    msg.innerHTML = "We couldn’t send your request right now. Please try again in a minute.";
+    if (CONFIG.WHATSAPP_NUMBER) {
+      const t = `Booking request\nName: ${d.name}\nWhatsApp: ${d.cc} ${d.phone}\nFrom: ${name(d.from)} (${d.from})\nTo: ${name(d.to)} (${d.to})\nTrip: ${d.trip === "round" ? "Round trip" : "One way"}\nDate: ${prettyDate(d.date)}${d.trip === "round" ? `\nReturn: ${prettyDate(d.ret)}` : ""}\nPassengers: ${d.pax}`;
+      msg.innerHTML += ` <a href="https://wa.me/${CONFIG.WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${encodeURIComponent(t)}" target="_blank" rel="noopener">Send it on WhatsApp instead</a>.`;
+    }
     msg.classList.add("show");
   } finally {
     btn.classList.remove("loading"); $("sendText").textContent = "Send booking request";
@@ -870,10 +874,6 @@ let tx = null;
 lb.addEventListener("touchstart", e => { tx = e.touches[0].clientX; }, { passive:true });
 lb.addEventListener("touchend", e => { if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) showLb(lbIndex + (dx < 0 ? 1 : -1)); tx = null; });
 
-/* photo credits (required by the photos' licenses) */
-const heroCredit = { file:"Mt. Machhapuchchhre & Phewa Lake.jpg", title:"Top banner", credit:"Wikimedia Commons" };
-$("credits").innerHTML = "Photos from Wikimedia Commons under free licenses: " +
-  [heroCredit, ...PHOTOS].map(p => `<a href="${commonsPage(p.file)}" target="_blank" rel="noopener">${esc(p.title)}</a> (${esc(p.credit)})`).join(", ") + ".";
 
 /* ticket notch position follows the stub height */
 const setCut = () => $("book").style.setProperty("--cut", document.querySelector(".stub").offsetHeight + "px");
