@@ -6,7 +6,7 @@
 const ALLOWED_ORIGINS = [
   "https://airtaxinepal.org",
   "https://www.airtaxinepal.org",
-  "https://YOUR-GITHUB-USERNAME.github.io" // for testing before the domain is connected
+  "https://premvioapp.github.io" // for testing before the domain is connected
 ];
 
 const AIRPORTS = { KTM:"Kathmandu", PKR:"Pokhara", BHR:"Bharatpur", BIR:"Biratnagar", BDP:"Bhadrapur", JKR:"Janakpur", SIF:"Simara", BWA:"Bhairahawa", KEP:"Nepalgunj", DHI:"Dhangadhi", SKH:"Surkhet", RJB:"Rajbiraj", TMI:"Tumlingtar", LUA:"Lukla", RHP:"Ramechhap", JMO:"Jomsom", JUM:"Jumla", IMK:"Simikot", DOP:"Dolpa", TPJ:"Taplejung" };
