@@ -40,15 +40,17 @@ export default {
     }
 
     const text =
-`✈️ <b>New booking request</b> · airtaxinepal.org
-
-👤 <b>Name:</b> ${esc(name)}
-📱 <b>WhatsApp:</b> ${esc(cc)} ${esc(phone)}
-💬 https://wa.me/${(cc + phone).replace(/\D/g, "")}
-🛫 <b>From:</b> ${AIRPORTS[from]} (${from})
-🛬 <b>To:</b> ${AIRPORTS[to]} (${to})
-📅 <b>Date:</b> ${date}
-👥 <b>Passengers:</b> ${pax}`;
+`<b>NEW BOOKING REQUEST</b>
+airtaxinepal.org
+--------------------------------
+<b>Name:</b> ${esc(name)}
+<b>WhatsApp:</b> ${esc(cc)} ${esc(phone)}
+<b>Chat link:</b> https://wa.me/${(cc + phone).replace(/\D/g, "")}
+<b>From:</b> ${AIRPORTS[from]} (${from})
+<b>To:</b> ${AIRPORTS[to]} (${to})
+<b>Date:</b> ${date}
+<b>Passengers:</b> ${pax}
+--------------------------------`;
 
     const r = await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`, {
       method: "POST",

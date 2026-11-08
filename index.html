@@ -6,7 +6,7 @@
 <title>Air Taxi Nepal · Domestic flight tickets</title>
 <meta name="description" content="Book domestic flight tickets across Nepal. Send your route and date, and we confirm your seat on WhatsApp.">
 <meta name="theme-color" content="#FF5C93">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23FF5C93'/%3E%3Cg transform='translate(4 4) rotate(-12 12 12)'%3E%3Cpath fill='%23fff' d='M22 12 15 10.5 10 3H7.5l3 7.5L4 10 2 7.5H.5l1 4.5-1 4.5H2L4 14l6.5-.5-3 7.5H10l5-7.5z'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://upload.wikimedia.org">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,7 +56,7 @@
   .drift-b{animation:drift 52s linear infinite reverse}
   @keyframes drift{from{transform:translateX(-60px)}50%{transform:translateX(60px)}to{transform:translateX(-60px)}}
 
-  .hero-in{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:64px 24px 200px;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:start}
+  .hero-in{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:64px 24px 96px;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:start}
   .hero-copy{padding-top:28px}
   .hero h1{font-family:var(--display);font-weight:800;font-size:clamp(2.6rem,5.6vw,4.6rem);line-height:.98;letter-spacing:-.035em;color:var(--plum);margin:0 0 22px}
   .hero h1 .line{display:block;overflow:hidden}
@@ -70,11 +70,6 @@
   .trust span{background:#fff;border:1px solid var(--petal);border-radius:999px;padding:8px 14px;font-size:.9rem;font-weight:600;display:inline-flex;align-items:center;gap:8px}
   .trust span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--rose)}
 
-  .mountains{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:260px;z-index:1;pointer-events:none}
-  .mountains .ridge{transform:translateY(100%);animation:ridge 1.4s cubic-bezier(.2,.8,.2,1) forwards}
-  .mountains .r2{animation-delay:.15s}
-  .mountains .r3{animation-delay:.3s}
-  @keyframes ridge{to{transform:translateY(0)}}
 
   /* ---------- Ticket form ---------- */
   .ticket{position:relative;background:#fff;border-radius:28px;box-shadow:0 30px 60px -20px rgba(224,36,111,.35),0 2px 0 rgba(224,36,111,.08);opacity:0;transform:translateY(40px) rotate(1.5deg);animation:land 1s .35s cubic-bezier(.2,.8,.2,1) forwards}
@@ -207,6 +202,21 @@
   .perf::before,.perf::after{display:none}
   .perf{margin:0 24px}
 
+  /* ---------- Departures ticker ---------- */
+  .ticker{background:var(--plum);color:#FFE3EE;overflow:hidden;position:relative}
+  .ticker::before,.ticker::after{content:"";position:absolute;top:0;bottom:0;width:60px;z-index:1;pointer-events:none}
+  .ticker::before{left:0;background:linear-gradient(90deg,var(--plum),transparent)}
+  .ticker::after{right:0;background:linear-gradient(-90deg,var(--plum),transparent)}
+  .ticker-track{display:flex;width:max-content;animation:tick 45s linear infinite}
+  .ticker:hover .ticker-track,.ticker:focus-within .ticker-track{animation-play-state:paused}
+  @keyframes tick{to{transform:translateX(-50%)}}
+  .ticker button{flex:none;display:flex;align-items:center;gap:12px;padding:18px 30px;background:none;border:0;border-right:1px solid rgba(255,201,220,.16);color:inherit;font-family:var(--display);font-weight:600;font-size:1.05rem;white-space:nowrap;cursor:pointer;transition:background .2s,color .2s}
+  .ticker button:hover{background:rgba(255,92,147,.22);color:#fff}
+  .ticker button svg{width:18px;height:18px;fill:var(--rose);transition:transform .3s}
+  .ticker button:hover svg{transform:translateX(4px)}
+  .ticker .dur{font-family:var(--body);font-weight:500;font-size:.85rem;opacity:.65}
+  @media (prefers-reduced-motion:reduce){.ticker{overflow-x:auto}.ticker-track{animation:none}}
+
   /* ---------- Views gallery ---------- */
   .gallery{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:220px;grid-auto-flow:dense;gap:14px}
   .tile{position:relative;margin:0;border-radius:22px;overflow:hidden;background:linear-gradient(135deg,#FFC9DC,#FF8FB5)}
@@ -260,7 +270,7 @@
 
   /* ---------- Responsive ---------- */
   @media (max-width:960px){
-    .hero-in{grid-template-columns:1fr;gap:36px;padding:40px 18px 180px}
+    .hero-in{grid-template-columns:1fr;gap:36px;padding:40px 18px 72px}
     .hero-copy{padding-top:0}
     .steps{grid-template-columns:1fr}
     .nav-links a:not(.nav-cta){display:none}
@@ -418,14 +428,11 @@
       </div>
     </div>
 
-    <!-- Himalaya ridges -->
-    <svg class="mountains" viewBox="0 0 1440 260" preserveAspectRatio="none" aria-hidden="true">
-      <g class="ridge r1"><path d="M0 170 L120 110 L210 150 L330 60 L420 120 L520 40 L600 110 L700 70 L820 130 L930 50 L1040 120 L1150 80 L1260 140 L1360 90 L1440 120 V260 H0Z" fill="#FFC9DC"/>
-        <path d="M330 60 L355 78 L340 76 L322 84 L312 74Z M520 40 L548 62 L530 58 L512 68 L500 56Z M930 50 L958 72 L940 68 L920 76 L910 64Z" fill="#fff"/></g>
-      <g class="ridge r2"><path d="M0 210 L140 150 L260 190 L380 130 L520 190 L660 140 L780 195 L920 150 L1060 200 L1200 150 L1320 190 L1440 160 V260 H0Z" fill="#FF8FB5"/></g>
-      <g class="ridge r3"><path d="M0 240 L180 205 L360 235 L560 200 L760 240 L960 210 L1160 240 L1320 215 L1440 232 V260 H0Z" fill="#FFF0F5"/></g>
-    </svg>
   </section>
+
+  <div class="ticker" aria-label="Quick routes">
+    <div class="ticker-track" id="ticker"></div>
+  </div>
 
   <section class="block" id="routes">
     <h2 class="reveal">Popular routes</h2>
@@ -594,16 +601,18 @@ async function sendToTelegram(d){
   }
   const waDigits = (d.cc + d.phone).replace(/\D/g, "");
   const text =
-`✈️ <b>New booking request</b> · airtaxinepal.org
-
-👤 <b>Name:</b> ${esc(d.name)}
-📱 <b>WhatsApp:</b> ${esc(d.cc)} ${esc(d.phone)}
-💬 https://wa.me/${waDigits}
-🛫 <b>From:</b> ${esc(name(d.from))} (${esc(d.from)})
-🛬 <b>To:</b> ${esc(name(d.to))} (${esc(d.to)})
-📅 <b>Date:</b> ${esc(prettyDate(d.date))}
-👥 <b>Passengers:</b> ${d.pax}
-🕒 <b>Sent:</b> ${esc(new Date().toLocaleString("en-GB"))}`;
+`<b>NEW BOOKING REQUEST</b>
+airtaxinepal.org
+--------------------------------
+<b>Name:</b> ${esc(d.name)}
+<b>WhatsApp:</b> ${esc(d.cc)} ${esc(d.phone)}
+<b>Chat link:</b> https://wa.me/${waDigits}
+<b>From:</b> ${esc(name(d.from))} (${esc(d.from)})
+<b>To:</b> ${esc(name(d.to))} (${esc(d.to)})
+<b>Date:</b> ${esc(prettyDate(d.date))}
+<b>Passengers:</b> ${d.pax}
+--------------------------------
+<i>Sent ${esc(new Date().toLocaleString("en-GB"))}</i>`;
   const r = await fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
     method:"POST", headers:{ "Content-Type":"application/json" },
     body: JSON.stringify({ chat_id: CONFIG.CHAT_ID, text, parse_mode:"HTML", disable_web_page_preview:true })
@@ -652,6 +661,17 @@ $("again").onclick = () => {
   fromSel.value = "KTM"; toSel.value = "PKR"; setPax(1); updateRoute();
   $("name").focus();
 };
+
+/* departures ticker (list is doubled for a seamless loop) */
+const tk = $("ticker");
+[...ROUTES, ...ROUTES].forEach(([f,t,dur], i) => {
+  const b = document.createElement("button");
+  b.type = "button";
+  if (i >= ROUTES.length) { b.tabIndex = -1; b.setAttribute("aria-hidden","true"); }
+  b.innerHTML = `${name(f)} ${plane} ${name(t)} <span class="dur">${dur}</span>`;
+  b.onclick = () => pickRoute(f, t);
+  tk.appendChild(b);
+});
 
 /* ---------- Real photos (Wikimedia Commons, free licenses) ---------- */
 const commonsPage = file => `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(file.replace(/ /g, "_"))}`;
