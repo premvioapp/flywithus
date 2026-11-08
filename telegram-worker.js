@@ -34,21 +34,26 @@ export default {
     const phone = String(d.phone || "").replace(/\D/g, "").slice(0, 15);
     const pax = Math.min(9, Math.max(1, parseInt(d.pax, 10) || 1));
     const { from, to, date } = d;
+    const round = d.trip === "round";
+    const ret = round ? String(d.ret || "") : "";
+    const ref = /^ATN-[A-Z0-9]{5}$/.test(d.ref || "") ? d.ref : "ATN-?????";
 
-    if (name.length < 2 || phone.length < 6 || !AIRPORTS[from] || !AIRPORTS[to] || from === to || !/^\d{4}-\d{2}-\d{2}$/.test(date || "")) {
+    if (name.length < 2 || phone.length < 6 || !AIRPORTS[from] || !AIRPORTS[to] || from === to || !/^\d{4}-\d{2}-\d{2}$/.test(date || "") || (round && !/^\d{4}-\d{2}-\d{2}$/.test(ret))) {
       return json({ ok: false }, 400);
     }
 
     const text =
 `<b>NEW BOOKING REQUEST</b>
-airtaxinepal.org
+Ref: <b>${ref}</b>  |  airtaxinepal.org
 --------------------------------
 <b>Name:</b> ${esc(name)}
 <b>WhatsApp:</b> ${esc(cc)} ${esc(phone)}
 <b>Chat link:</b> https://wa.me/${(cc + phone).replace(/\D/g, "")}
+--------------------------------
 <b>From:</b> ${AIRPORTS[from]} (${from})
 <b>To:</b> ${AIRPORTS[to]} (${to})
-<b>Date:</b> ${date}
+<b>Trip:</b> ${round ? "Round trip" : "One way"}
+<b>Date:</b> ${date}${round ? `\n<b>Return:</b> ${ret}` : ""}
 <b>Passengers:</b> ${pax}
 --------------------------------`;
 

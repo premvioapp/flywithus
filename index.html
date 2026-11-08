@@ -6,6 +6,13 @@
 <title>Air Taxi Nepal · Domestic flight tickets</title>
 <meta name="description" content="Book domestic flight tickets across Nepal. Send your route and date, and we confirm your seat on WhatsApp.">
 <meta name="theme-color" content="#FF5C93">
+<link rel="canonical" href="https://airtaxinepal.org/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://airtaxinepal.org/">
+<meta property="og:title" content="Air Taxi Nepal: domestic flight tickets">
+<meta property="og:description" content="Send your route and date. We confirm your domestic flight in Nepal on WhatsApp.">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Ama_Dablam%2C_Nepal.jpg/1280px-Ama_Dablam%2C_Nepal.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23FF5C93'/%3E%3Cg transform='translate(4 4) rotate(-12 12 12)'%3E%3Cpath fill='%23fff' d='M22 12 15 10.5 10 3H7.5l3 7.5L4 10 2 7.5H.5l1 4.5-1 4.5H2L4 14l6.5-.5-3 7.5H10l5-7.5z'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://upload.wikimedia.org">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -202,6 +209,45 @@
   .perf::before,.perf::after{display:none}
   .perf{margin:0 24px}
 
+  /* ---------- Live boarding pass ---------- */
+  .stub-meta{display:grid;grid-template-columns:1.5fr 1.3fr .6fr 1fr;gap:12px;margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,.32)}
+  .stub-meta span{display:block;font-size:.72rem;opacity:.82}
+  .stub-meta b{display:block;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .stub-meta b.pulse{animation:pulse .45s ease}
+  @keyframes pulse{40%{transform:translateY(-3px);opacity:.6}}
+
+  /* trip switch */
+  .seg{position:relative;display:grid;grid-template-columns:1fr 1fr;height:50px;padding:4px;border:2px solid #F6DCE6;background:#FFF8FB;border-radius:14px}
+  .seg::before{content:"";position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);background:var(--plum);border-radius:10px;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+  .seg.round::before{transform:translateX(100%)}
+  .seg button{position:relative;z-index:1;border:0;background:none;font-weight:700;font-size:.9rem;color:var(--ink);cursor:pointer;transition:color .3s}
+  .seg button[aria-checked="true"]{color:#fff}
+  .dates.one{grid-template-columns:1fr}
+  .dates.one .ret{display:none}
+  .dates .ret{animation:fade .35s ease}
+
+  /* reference + barcode */
+  .refbox{background:var(--blush);border-radius:16px;padding:14px 18px 16px;margin-bottom:16px}
+  .refbox span{display:block;font-size:.8rem}
+  .refbox b{display:block;font-family:var(--display);font-size:1.6rem;letter-spacing:.06em;color:var(--plum);margin:2px 0 10px}
+  .barcode{height:42px;border-radius:4px;background:repeating-linear-gradient(90deg,var(--plum) 0 2px,transparent 2px 4px,var(--plum) 4px 5px,transparent 5px 9px,var(--plum) 9px 12px,transparent 12px 14px,var(--plum) 14px 15px,transparent 15px 19px)}
+
+  /* chat button + mobile bar */
+  .chat-fab{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:30;display:flex;align-items:center;gap:10px;padding:14px 20px;border-radius:999px;background:var(--magenta);color:#fff;font-weight:700;text-decoration:none;box-shadow:0 14px 30px -10px rgba(224,36,111,.6);transform:translateY(120px);animation:fabIn .6s 1.4s cubic-bezier(.2,1.4,.4,1) forwards;transition:background .2s}
+  .chat-fab:hover{background:var(--plum)}
+  .chat-fab svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;stroke-linejoin:round}
+  @keyframes fabIn{to{transform:none}}
+  .mbar{display:none}
+  @media (max-width:760px){
+    .mbar{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;gap:10px;padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(255,240,245,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid rgba(224,36,111,.15);transform:translateY(110%);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+    .mbar.show{transform:none}
+    .mbar a{flex:1;display:grid;place-items:center;height:50px;border-radius:14px;font-weight:700;text-decoration:none}
+    .mbar-book{background:var(--magenta);color:#fff}
+    .mbar-chat{flex:0 0 auto !important;width:auto;padding:0 18px;background:#fff;color:var(--magenta);border:2px solid var(--petal)}
+    .chat-fab{display:none}
+    footer{padding-bottom:110px}
+  }
+
   /* ---------- Departures ticker ---------- */
   .ticker{background:var(--plum);color:#FFE3EE;overflow:hidden;position:relative}
   .ticker::before,.ticker::after{content:"";position:absolute;top:0;bottom:0;width:60px;z-index:1;pointer-events:none}
@@ -282,6 +328,10 @@
     .perf::before{left:-26px}.perf::after{right:-26px}
     .row{grid-template-columns:1fr}
     .places .row{grid-template-columns:1fr 1fr}
+    .stub-meta{grid-template-columns:1fr 1fr;gap:10px 14px}
+    .routes{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:18px;gap:12px;margin:0 -18px;padding:4px 18px 14px;scrollbar-width:none}
+    .routes::-webkit-scrollbar{display:none}
+    .rcard{flex:0 0 78%;scroll-snap-align:start}
     .route-line{width:64px}
     .logo small{display:none}
     .steps-wrap{margin:0 12px;border-radius:28px}
@@ -354,6 +404,12 @@
             <div class="route-line" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M22 12 15 10.5 10 3H7.5l3 7.5L4 10 2 7.5H.5l1 4.5-1 4.5H2L4 14l6.5-.5-3 7.5H10l5-7.5z"/></svg></div>
             <div class="to"><div class="code" id="codeTo">PKR</div><div class="city" id="cityTo">Pokhara</div></div>
           </div>
+          <div class="stub-meta">
+            <div><span>Passenger</span><b id="tName">Your name</b></div>
+            <div><span>Date</span><b id="tDate">Pick a date</b></div>
+            <div><span>Seats</span><b id="tPax">1</b></div>
+            <div><span>Flight time</span><b id="tDur">~25 min</b></div>
+          </div>
         </div>
         <div class="perf" aria-hidden="true"></div>
 
@@ -392,10 +448,12 @@
           </div>
 
           <div class="row">
-            <div class="field" data-f="date">
-              <label for="date">Travel date</label>
-              <input id="date" name="date" type="date">
-              <div class="err">Pick today or a later date.</div>
+            <div class="field">
+              <label id="tripLabel">Trip</label>
+              <div class="seg" id="seg" role="radiogroup" aria-labelledby="tripLabel">
+                <button type="button" role="radio" aria-checked="true" data-trip="one">One way</button>
+                <button type="button" role="radio" aria-checked="false" data-trip="round">Round trip</button>
+              </div>
             </div>
             <div class="field">
               <label id="paxLabel">Passengers</label>
@@ -404,6 +462,19 @@
                 <output id="pax" aria-live="polite">1</output>
                 <button type="button" id="paxPlus" aria-label="More passengers">+</button>
               </div>
+            </div>
+          </div>
+
+          <div class="row dates one" id="dates">
+            <div class="field" data-f="date">
+              <label for="date">Travel date</label>
+              <input id="date" name="date" type="date">
+              <div class="err">Pick today or a later date.</div>
+            </div>
+            <div class="field ret" data-f="ret">
+              <label for="ret">Return date</label>
+              <input id="ret" name="ret" type="date">
+              <div class="err">Pick a date on or after your travel date.</div>
             </div>
           </div>
 
@@ -420,7 +491,12 @@
         <div class="done" id="done" tabindex="-1">
           <div class="done-badge"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
           <h3>Request sent</h3>
-          <p>We’ll message you on WhatsApp at <b id="doneNum"></b> with available flights.</p>
+          <p>We’ll message you on WhatsApp at <b id="doneNum"></b> with available flights and fares.</p>
+          <div class="refbox">
+            <span>Booking reference</span>
+            <b id="doneRef"></b>
+            <div class="barcode" aria-hidden="true"></div>
+          </div>
           <div class="summary" id="summary"></div>
           <button type="button" class="again" id="again">Book another flight</button>
         </div>
@@ -460,6 +536,10 @@
 
 </main>
 
+<div class="mbar" id="mbar">
+  <a href="#book" class="mbar-book">Book a flight</a>
+</div>
+
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer" aria-hidden="true">
   <button type="button" class="lb-btn lb-close" id="lbClose" aria-label="Close photo">×</button>
   <button type="button" class="lb-btn lb-prev" id="lbPrev" aria-label="Previous photo">‹</button>
@@ -489,8 +569,9 @@
      the worker URL in PROXY_URL and leave BOT_TOKEN empty.
    ========================================================= */
 const CONFIG = {
-  BOT_TOKEN: "9197262737:AAH2FfbUt8oot_y0--grYfimIU1xugfQqhM",
-  CHAT_ID:   "9197262737",
+  BOT_TOKEN: "PASTE_YOUR_BOT_TOKEN_HERE",
+  CHAT_ID:   "PASTE_YOUR_CHAT_ID_HERE",
+  WHATSAPP_NUMBER: "",  // optional, your number with country code, e.g. "9779812345678" (shows a chat button)
   PROXY_URL: ""   // e.g. "https://airtaxi-telegram.yourname.workers.dev"
 };
 
@@ -531,6 +612,27 @@ function setCode(el, cityEl, code){
 function updateRoute(){
   setCode($("codeFrom"), $("cityFrom"), fromSel.value);
   setCode($("codeTo"), $("cityTo"), toSel.value);
+  updateMeta();
+}
+
+/* live boarding pass */
+let trip = "one";
+const shortDate = v => new Date(v + "T00:00:00").toLocaleDateString("en-GB", { day:"numeric", month:"short" });
+function flightTime(f, t){
+  const r = ROUTES.find(x => (x[0] === f && x[1] === t) || (x[0] === t && x[1] === f));
+  return r ? r[2].replace("about ", "~") : "On request";
+}
+function setMeta(id, val){
+  const el = $(id); if (!el || el.textContent === String(val)) return;
+  el.textContent = val; el.classList.remove("pulse"); void el.offsetWidth; el.classList.add("pulse");
+}
+function updateMeta(){
+  const nm = $("name") ? $("name").value.trim() : "";
+  setMeta("tName", nm || "Your name");
+  const dv = $("date") ? $("date").value : "", rv = $("ret") ? $("ret").value : "";
+  setMeta("tDate", !dv ? "Pick a date" : (trip === "round" && rv ? `${shortDate(dv)} – ${shortDate(rv)}` : shortDate(dv)));
+  setMeta("tPax", typeof pax === "undefined" ? 1 : pax);
+  setMeta("tDur", fromSel.value === toSel.value ? "–" : flightTime(fromSel.value, toSel.value));
 }
 fromSel.addEventListener("change", () => { clearBad("from"); clearBad("to"); updateRoute(); });
 toSel.addEventListener("change", () => { clearBad("to"); updateRoute(); });
@@ -547,14 +649,37 @@ $("date").min = today;
 
 /* passengers */
 let pax = 1;
-const setPax = n => { pax = Math.min(9, Math.max(1, n)); $("pax").textContent = pax; };
+const setPax = n => { pax = Math.min(9, Math.max(1, n)); $("pax").textContent = pax; updateMeta(); };
 $("paxMinus").onclick = () => setPax(pax - 1);
 $("paxPlus").onclick = () => setPax(pax + 1);
 
 /* phone: digits only */
 $("phone").addEventListener("input", e => { e.target.value = e.target.value.replace(/\D/g, ""); clearBad("phone"); });
 $("cc").addEventListener("input", e => { let v = e.target.value.replace(/[^\d]/g, "").slice(0,4); e.target.value = "+" + v; });
-["name","date"].forEach(id => $(id).addEventListener("input", () => clearBad(id)));
+["name","date"].forEach(id => $(id).addEventListener("input", () => { clearBad(id); updateMeta(); }));
+
+/* trip type */
+function setTrip(t){
+  trip = t;
+  document.querySelectorAll("#seg button").forEach(b => b.setAttribute("aria-checked", String(b.dataset.trip === t)));
+  $("seg").classList.toggle("round", t === "round");
+  $("dates").classList.toggle("one", t === "one");
+  if (t === "one") clearBad("ret");
+  $("ret").min = $("date").value || today;
+  updateMeta();
+}
+document.querySelectorAll("#seg button").forEach(b => b.addEventListener("click", () => setTrip(b.dataset.trip)));
+$("date").addEventListener("change", () => { $("ret").min = $("date").value || today; });
+$("ret").addEventListener("input", () => { clearBad("ret"); updateMeta(); });
+
+/* remember contact details on this device */
+try {
+  const saved = JSON.parse(localStorage.getItem("atn-contact") || "null");
+  if (saved) { $("name").value = saved.name || ""; $("cc").value = saved.cc || "+977"; $("phone").value = saved.phone || ""; }
+} catch (e) {}
+["name","cc","phone"].forEach(id => $(id).addEventListener("input", () => {
+  try { localStorage.setItem("atn-contact", JSON.stringify({ name:$("name").value, cc:$("cc").value, phone:$("phone").value })); } catch (e) {}
+}));
 
 /* route cards */
 const grid = $("routeGrid");
@@ -585,6 +710,7 @@ function validate(){
   if (!cc || (cc === "977" ? !/^9\d{9}$/.test(digits) : (digits.length < 6 || digits.length > 14))) mark("phone", $("phone"));
   if (fromSel.value === toSel.value) mark("to", toSel);
   if (!$("date").value || $("date").value < today) mark("date", $("date"));
+  if (trip === "round" && (!$("ret").value || $("ret").value < $("date").value)) mark("ret", $("ret"));
   if (first) first.focus();
   return ok;
 }
@@ -602,14 +728,16 @@ async function sendToTelegram(d){
   const waDigits = (d.cc + d.phone).replace(/\D/g, "");
   const text =
 `<b>NEW BOOKING REQUEST</b>
-airtaxinepal.org
+Ref: <b>${d.ref}</b>  |  airtaxinepal.org
 --------------------------------
 <b>Name:</b> ${esc(d.name)}
 <b>WhatsApp:</b> ${esc(d.cc)} ${esc(d.phone)}
 <b>Chat link:</b> https://wa.me/${waDigits}
+--------------------------------
 <b>From:</b> ${esc(name(d.from))} (${esc(d.from)})
 <b>To:</b> ${esc(name(d.to))} (${esc(d.to)})
-<b>Date:</b> ${esc(prettyDate(d.date))}
+<b>Trip:</b> ${d.trip === "round" ? "Round trip" : "One way"}
+<b>Date:</b> ${esc(prettyDate(d.date))}${d.trip === "round" ? `\n<b>Return:</b> ${esc(prettyDate(d.ret))}` : ""}
 <b>Passengers:</b> ${d.pax}
 --------------------------------
 <i>Sent ${esc(new Date().toLocaleString("en-GB"))}</i>`;
@@ -622,6 +750,11 @@ airtaxinepal.org
 }
 
 let lastSent = 0;
+function makeRef(){
+  const a = "ABCDEFGHJKMNPQRSTUVWXYZ23456789", r = new Uint32Array(5);
+  crypto.getRandomValues(r);
+  return "ATN-" + Array.from(r, x => a[x % a.length]).join("");
+}
 $("bookingForm").addEventListener("submit", async e => {
   e.preventDefault();
   const msg = $("formMsg"); msg.classList.remove("show");
@@ -631,7 +764,8 @@ $("bookingForm").addEventListener("submit", async e => {
 
   const d = {
     name: $("name").value.trim(), cc: $("cc").value, phone: $("phone").value,
-    from: fromSel.value, to: toSel.value, date: $("date").value, pax
+    from: fromSel.value, to: toSel.value, date: $("date").value, pax,
+    trip, ret: trip === "round" ? $("ret").value : "", ref: makeRef()
   };
   const btn = $("sendBtn");
   btn.classList.add("loading"); $("sendText").textContent = "Sending…";
@@ -639,10 +773,12 @@ $("bookingForm").addEventListener("submit", async e => {
     await sendToTelegram(d);
     lastSent = Date.now();
     $("doneNum").textContent = `${d.cc} ${d.phone}`;
+    $("doneRef").textContent = d.ref;
     $("summary").innerHTML = `
       <div><span>Passenger</span><b>${esc(d.name)}</b></div>
       <div><span>Route</span><b>${esc(name(d.from))} → ${esc(name(d.to))}</b></div>
-      <div><span>Date</span><b>${esc(prettyDate(d.date))}</b></div>
+      <div><span>${d.trip === "round" ? "Departure" : "Date"}</span><b>${esc(prettyDate(d.date))}</b></div>
+      ${d.trip === "round" ? `<div><span>Return</span><b>${esc(prettyDate(d.ret))}</b></div>` : ""}
       <div><span>Passengers</span><b>${d.pax}</b></div>`;
     $("book").classList.add("sent");
     $("done").focus({ preventScroll: true });
@@ -657,8 +793,9 @@ $("bookingForm").addEventListener("submit", async e => {
 
 $("again").onclick = () => {
   $("book").classList.remove("sent");
-  $("bookingForm").reset(); $("cc").value = "+977";
-  fromSel.value = "KTM"; toSel.value = "PKR"; setPax(1); updateRoute();
+  const keep = { name:$("name").value, cc:$("cc").value, phone:$("phone").value };
+  $("bookingForm").reset(); Object.entries(keep).forEach(([k,v]) => $(k).value = v);
+  fromSel.value = "KTM"; toSel.value = "PKR"; setPax(1); setTrip("one"); updateRoute();
   $("name").focus();
 };
 
@@ -742,6 +879,28 @@ $("credits").innerHTML = "Photos from Wikimedia Commons under free licenses: " +
 const setCut = () => $("book").style.setProperty("--cut", document.querySelector(".stub").offsetHeight + "px");
 setCut(); addEventListener("resize", setCut);
 if (document.fonts) document.fonts.ready.then(setCut);
+
+/* chat button (only if a WhatsApp number is set) */
+if (CONFIG.WHATSAPP_NUMBER) {
+  const num = CONFIG.WHATSAPP_NUMBER.replace(/\D/g, "");
+  const link = `https://wa.me/${num}?text=${encodeURIComponent("Hello Air Taxi Nepal, I want to book a domestic flight.")}`;
+  const icon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>';
+  const fab = document.createElement("a");
+  fab.className = "chat-fab"; fab.href = link; fab.target = "_blank"; fab.rel = "noopener";
+  fab.innerHTML = icon + "<span>Chat with us</span>";
+  document.body.appendChild(fab);
+  const mc = document.createElement("a");
+  mc.className = "mbar-chat"; mc.href = link; mc.target = "_blank"; mc.rel = "noopener"; mc.textContent = "Chat";
+  $("mbar").appendChild(mc);
+}
+
+/* mobile: show the Book bar when the form is off screen */
+const mbar = $("mbar");
+new IntersectionObserver(([e]) => mbar.classList.toggle("show", !e.isIntersecting && window.scrollY > 300))
+  .observe($("book"));
+addEventListener("scroll", () => { if (window.scrollY <= 300) mbar.classList.remove("show"); }, { passive:true });
+
+updateMeta();
 
 /* scroll reveals */
 const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }), { threshold: .15 });
