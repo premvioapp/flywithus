@@ -4,11 +4,9 @@
 // Your token stays private here: visitors can never see this code.
 
 // 1. PASTE YOUR DETAILS HERE (keep the quotes)
-const BOT_TOKEN = "9197262737:AAH2FfbUt8oot_y0--grYfimIU1xugfQqhM";
-const CHAT_ID   = "9197262737";
+const BOT_TOKEN = "PASTE_YOUR_BOT_TOKEN_HERE";
+const CHAT_ID   = "PASTE_YOUR_CHAT_ID_HERE";
 
-// Websites allowed to send bookings (any *.github.io address is also allowed)
-const ALLOWED = ["https://airtaxinepal.org", "https://www.airtaxinepal.org"];
 
 const AIRPORTS = { KTM:"Kathmandu", PKR:"Pokhara", BHR:"Bharatpur", BIR:"Biratnagar", BDP:"Bhadrapur", JKR:"Janakpur", SIF:"Simara", BWA:"Bhairahawa", KEP:"Nepalgunj", DHI:"Dhangadhi", SKH:"Surkhet", RJB:"Rajbiraj", TMI:"Tumlingtar", LUA:"Lukla", RHP:"Ramechhap", JMO:"Jomsom", JUM:"Jumla", IMK:"Simikot", DOP:"Dolpa", TPJ:"Taplejung" };
 
@@ -16,21 +14,50 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", "
 const isDate = v => /^\d{4}-\d{2}-\d{2}$/.test(v || "");
 const pretty = v => new Date(v + "T00:00:00Z").toLocaleDateString("en-GB", { weekday:"short", day:"numeric", month:"short", year:"numeric", timeZone:"UTC" });
 
+function explain(desc) {
+  const d = String(desc || "");
+  if (/unauthorized|not found/i.test(d) && !/chat/i.test(d)) return "Your BOT_TOKEN is wrong or was revoked. Copy the latest token from @BotFather and paste it at the top of this worker.";
+  if (/chat not found/i.test(d)) return "Your CHAT_ID is wrong, or you never pressed Start in your bot. Open your bot in Telegram, press Start, then get YOUR ID from @userinfobot. Do not use the number at the start of the bot token.";
+  if (/blocked by the user/i.test(d)) return "You blocked the bot. Open it in Telegram, unblock it, and press Start.";
+  if (/PASTE_YOUR/.test(d)) return "You haven't pasted your BOT_TOKEN and CHAT_ID at the top of this worker yet.";
+  return d;
+}
+
+async function sendTelegram(text) {
+  if (BOT_TOKEN.startsWith("PASTE") || CHAT_ID.startsWith("PASTE")) return { ok: false, error: explain("PASTE_YOUR") };
+  try {
+    const r = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: "HTML", disable_web_page_preview: true })
+    });
+    const t = await r.json().catch(() => ({}));
+    return t.ok ? { ok: true } : { ok: false, error: explain(t.description || "HTTP " + r.status) };
+  } catch (e) {
+    return { ok: false, error: "Could not reach Telegram: " + e.message };
+  }
+}
+
 export default {
   async fetch(req) {
-    const origin = req.headers.get("Origin") || "";
-    const allowed = ALLOWED.includes(origin) || /^https:\/\/[a-z0-9-]+\.github\.io$/i.test(origin);
     const cors = {
-      "Access-Control-Allow-Origin": allowed ? origin : ALLOWED[0],
+      "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type"
     };
     const json = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { ...cors, "Content-Type": "application/json" } });
 
     if (req.method === "OPTIONS") return new Response(null, { headers: cors });
-    if (req.method === "GET") return json({ ok: true, message: "Booking relay is running." });
+    if (req.method === "GET") {
+      const url = new URL(req.url);
+      if (!url.searchParams.has("test")) {
+        return new Response("Booking relay is running.\n\nTo send a test message to your Telegram, add ?test to the end of this address.", { headers: { "Content-Type": "text/plain; charset=utf-8" } });
+      }
+      const res = await sendTelegram("<b>Test message</b>\nYour airtaxinepal.org booking relay is connected.");
+      return new Response(res.ok ? "SUCCESS: a test message was sent to your Telegram bot chat." : "PROBLEM: " + res.error,
+        { status: res.ok ? 200 : 500, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+    }
     if (req.method !== "POST") return json({ ok: false, error: "Use POST" }, 405);
-    if (!allowed) return json({ ok: false, error: "Website not allowed: " + origin }, 403);
 
     let d;
     try { d = await req.json(); } catch { return json({ ok: false, error: "Bad data" }, 400); }
@@ -62,12 +89,7 @@ Ref: <b>${ref}</b>  |  airtaxinepal.org
 <b>Passengers:</b> ${pax}
 --------------------------------`;
 
-    const r = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: CHAT_ID, text, parse_mode: "HTML", disable_web_page_preview: true })
-    });
-    const t = await r.json().catch(() => ({}));
-    return t.ok ? json({ ok: true }) : json({ ok: false, error: "Telegram: " + (t.description || r.status) }, 502);
+    const res = await sendTelegram(text);
+    return res.ok ? json({ ok: true }) : json({ ok: false, error: res.error }, 502);
   }
 };

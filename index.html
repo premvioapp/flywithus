@@ -138,6 +138,7 @@
   .form-msg{display:none;margin-top:12px;padding:12px 14px;border-radius:12px;background:#FFE3EE;color:var(--magenta);font-weight:600;font-size:.9rem}
   .form-msg.show{display:block}
   .form-msg a{color:var(--plum);font-weight:700}
+  .form-msg .why{display:block;margin-top:6px;font-weight:500;font-size:.78rem;opacity:.8}
 
   /* success state */
   .done{display:none;padding:34px 28px 32px;text-align:center}
@@ -566,7 +567,7 @@
    bot token and chat ID inside the WORKER, not here.
    ========================================================= */
 const CONFIG = {
-  PROXY_URL: "https://airtaxi-booking.backoffice-airtaxinepal.workers.dev/",  // e.g. "https://airtaxi-booking.yourname.workers.dev"
+  PROXY_URL: "PASTE_YOUR_WORKER_URL_HERE",  // e.g. "https://airtaxi-booking.yourname.workers.dev"
   WHATSAPP_NUMBER: "",  // optional, e.g. "9779812345678": shows a chat button and a backup "send on WhatsApp" option
 
   // Only used if PROXY_URL is empty (works only outside Nepal):
@@ -785,10 +786,15 @@ $("bookingForm").addEventListener("submit", async e => {
   } catch (err) {
     console.error("Booking not sent:", err);
     msg.innerHTML = "We couldn’t send your request right now. Please try again in a minute.";
+    const why = err && err.message === "Failed to fetch"
+      ? "Can’t reach the booking relay. Check PROXY_URL in index.html."
+      : String(err && err.message || err).replace("Worker error: ", "");
+    const whyHtml = `<small class="why">Reason: ${esc(why)}</small>`;
     if (CONFIG.WHATSAPP_NUMBER) {
       const t = `Booking request\nName: ${d.name}\nWhatsApp: ${d.cc} ${d.phone}\nFrom: ${name(d.from)} (${d.from})\nTo: ${name(d.to)} (${d.to})\nTrip: ${d.trip === "round" ? "Round trip" : "One way"}\nDate: ${prettyDate(d.date)}${d.trip === "round" ? `\nReturn: ${prettyDate(d.ret)}` : ""}\nPassengers: ${d.pax}`;
       msg.innerHTML += ` <a href="https://wa.me/${CONFIG.WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${encodeURIComponent(t)}" target="_blank" rel="noopener">Send it on WhatsApp instead</a>.`;
     }
+    msg.innerHTML += whyHtml;
     msg.classList.add("show");
   } finally {
     btn.classList.remove("loading"); $("sendText").textContent = "Send booking request";
