@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Air Taxi Nepal · Domestic flight tickets</title>
+<meta name="description" content="Book domestic flight tickets across Nepal. Send your route and date, and we confirm your seat on WhatsApp.">
+<meta name="theme-color" content="#FF5C93">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
+<link rel="preconnect" href="https://upload.wikimedia.org">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blush:#FFF0F5;
+    --petal:#FFC9DC;
+    --rose:#FF5C93;
+    --magenta:#E0246F;
+    --plum:#3B0D2C;
+    --ink:#5A2747;
+    --white:#FFFFFF;
+    --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --body:"Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *,*::before,*::after{box-sizing:inherit}
+  html{scroll-behavior:smooth;scroll-padding-top:calc(80px + env(safe-area-inset-top,0px))}
+  body{margin:0;background:var(--blush);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  img,svg{max-width:100%}
+  a{color:inherit}
+  button,input,select{font:inherit;color:inherit}
+  :focus-visible{outline:3px solid var(--magenta);outline-offset:3px;border-radius:6px}
+
+  /* ---------- Nav ---------- */
+  .nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(255,240,245,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(224,36,111,.12)}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:rgba(255,240,245,.82);backdrop-filter:blur(12px)}
+  .nav-in{max-width:1200px;margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:800;font-size:1.15rem;color:var(--plum);letter-spacing:-.01em}
+  .logo-mark{width:36px;height:36px;border-radius:50%;background:var(--rose);display:grid;place-items:center;transform:rotate(-12deg)}
+  .logo-mark svg{width:20px;height:20px;fill:#fff}
+  .logo small{font-weight:400;color:var(--magenta);font-size:.95rem}
+  .nav-links{display:flex;gap:26px;align-items:center}
+  .nav-links a{text-decoration:none;font-weight:600;font-size:.95rem;color:var(--ink)}
+  .nav-links a:hover{color:var(--magenta)}
+  .nav-cta{background:var(--plum);color:#fff !important;padding:10px 18px;border-radius:999px}
+  .nav-cta:hover{background:var(--magenta)}
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#FFE3EE 0%,var(--blush) 70%)}
+  .sky{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .cloud{fill:#fff;opacity:.85}
+  .drift-a{animation:drift 38s linear infinite}
+  .drift-b{animation:drift 52s linear infinite reverse}
+  @keyframes drift{from{transform:translateX(-60px)}50%{transform:translateX(60px)}to{transform:translateX(-60px)}}
+
+  .hero-in{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:64px 24px 200px;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:start}
+  .hero-copy{padding-top:28px}
+  .hero h1{font-family:var(--display);font-weight:800;font-size:clamp(2.6rem,5.6vw,4.6rem);line-height:.98;letter-spacing:-.035em;color:var(--plum);margin:0 0 22px}
+  .hero h1 .line{display:block;overflow:hidden}
+  .hero h1 .line span{display:block;transform:translateY(105%);animation:rise .9s cubic-bezier(.2,.8,.2,1) forwards}
+  .hero h1 .line:nth-child(2) span{animation-delay:.12s}
+  .hero h1 .line:nth-child(3) span{animation-delay:.24s}
+  @keyframes rise{to{transform:translateY(0)}}
+  .hero p.lead{font-size:1.15rem;max-width:30em;margin:0 0 30px;opacity:0;animation:fade .8s .5s ease forwards}
+  @keyframes fade{to{opacity:1}}
+  .trust{display:flex;flex-wrap:wrap;gap:12px;opacity:0;animation:fade .8s .7s ease forwards}
+  .trust span{background:#fff;border:1px solid var(--petal);border-radius:999px;padding:8px 14px;font-size:.9rem;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+  .trust span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--rose)}
+
+  .mountains{position:absolute;left:0;right:0;bottom:-2px;width:100%;height:260px;z-index:1;pointer-events:none}
+  .mountains .ridge{transform:translateY(100%);animation:ridge 1.4s cubic-bezier(.2,.8,.2,1) forwards}
+  .mountains .r2{animation-delay:.15s}
+  .mountains .r3{animation-delay:.3s}
+  @keyframes ridge{to{transform:translateY(0)}}
+
+  /* ---------- Ticket form ---------- */
+  .ticket{position:relative;background:#fff;border-radius:28px;box-shadow:0 30px 60px -20px rgba(224,36,111,.35),0 2px 0 rgba(224,36,111,.08);opacity:0;transform:translateY(40px) rotate(1.5deg);animation:land 1s .35s cubic-bezier(.2,.8,.2,1) forwards}
+  @keyframes land{to{opacity:1;transform:none}}
+  .stub{background:var(--rose);color:#fff;border-radius:28px 28px 0 0;padding:20px 28px 22px;position:relative;overflow:hidden}
+  .stub-top{display:flex;justify-content:space-between;align-items:center;font-size:.9rem;font-weight:600}
+  .stub-top .site{opacity:.85;font-weight:500}
+  .route{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin-top:14px}
+  .code{font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,5vw,3.2rem);letter-spacing:-.02em;line-height:1;transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .35s}
+  .code.flip{transform:translateY(-12px);opacity:0}
+  .city{font-size:.9rem;opacity:.9;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .route .to{text-align:right}
+  .route-line{position:relative;width:110px;height:28px}
+  .route-line::before{content:"";position:absolute;left:0;right:0;top:50%;border-top:2px dashed rgba(255,255,255,.6)}
+  .route-line svg{position:absolute;top:50%;left:0;width:26px;height:26px;fill:#fff;transform:translate(0,-50%);animation:hop 3.2s ease-in-out infinite}
+  @keyframes hop{0%{left:0;opacity:0}12%{opacity:1}88%{opacity:1}100%{left:calc(100% - 26px);opacity:0}}
+
+  .perf{position:relative;height:0;border-top:2px dashed var(--petal);margin:0 22px}
+  .perf::before,.perf::after{content:"";position:absolute;top:-14px;width:26px;height:26px;border-radius:50%;background:var(--blush)}
+  .perf::before{left:-36px}
+  .perf::after{right:-36px}
+
+  form{padding:22px 28px 28px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .field{margin-bottom:14px;position:relative}
+  .field label{display:block;font-size:.85rem;font-weight:700;color:var(--plum);margin-bottom:6px}
+  .field input,.field select{width:100%;height:50px;border:2px solid #F6DCE6;background:#FFF8FB;border-radius:14px;padding:0 14px;font-size:1rem;transition:border-color .2s,background .2s,box-shadow .2s;appearance:none;-webkit-appearance:none}
+  .field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23E0246F' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:38px;cursor:pointer}
+  .field input:hover,.field select:hover{border-color:var(--petal)}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--rose);background:#fff;box-shadow:0 0 0 4px rgba(255,92,147,.15)}
+  .field.bad input,.field.bad select{border-color:var(--magenta);animation:shake .4s}
+  @keyframes shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+  .err{display:none;color:var(--magenta);font-size:.82rem;font-weight:600;margin-top:5px}
+  .field.bad .err{display:block}
+
+  .phone{display:grid;grid-template-columns:96px 1fr;gap:8px}
+  .places{position:relative}
+  .swap{position:absolute;left:50%;top:31px;transform:translateX(-50%);z-index:2;width:38px;height:38px;border-radius:50%;border:3px solid #fff;background:var(--plum);color:#fff;display:grid;place-items:center;cursor:pointer;transition:background .2s,transform .45s cubic-bezier(.2,.8,.2,1)}
+  .swap:hover{background:var(--magenta)}
+  .swap.spin{transform:translateX(-50%) rotate(180deg)}
+  .swap svg{width:16px;height:16px}
+
+  .pax{display:flex;align-items:center;justify-content:space-between;height:50px;border:2px solid #F6DCE6;background:#FFF8FB;border-radius:14px;padding:0 6px}
+  .pax button{width:38px;height:38px;border-radius:10px;border:0;background:var(--petal);color:var(--plum);font-size:1.3rem;font-weight:700;cursor:pointer;transition:background .2s}
+  .pax button:hover{background:var(--rose);color:#fff}
+  .pax output{font-weight:700;font-size:1.05rem;min-width:2ch;text-align:center}
+
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+  .send{position:relative;overflow:hidden;width:100%;height:58px;margin-top:6px;border:0;border-radius:16px;background:var(--magenta);color:#fff;font-weight:700;font-size:1.08rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:background .2s,transform .15s}
+  .send:hover{background:var(--plum)}
+  .send:active{transform:scale(.98)}
+  .send svg{width:22px;height:22px;fill:#fff;transition:transform .2s}
+  .send:hover svg{transform:translateX(4px) rotate(-8deg)}
+  .send.loading{pointer-events:none;background:var(--plum)}
+  .send.loading svg{animation:takeoff 1s cubic-bezier(.5,0,.75,0) infinite}
+  @keyframes takeoff{0%{transform:translate(0,0)}100%{transform:translate(160px,-40px) rotate(-18deg);opacity:0}}
+  .note{font-size:.82rem;text-align:center;margin:12px 0 0;opacity:.8}
+  .form-msg{display:none;margin-top:12px;padding:12px 14px;border-radius:12px;background:#FFE3EE;color:var(--magenta);font-weight:600;font-size:.9rem}
+  .form-msg.show{display:block}
+
+  /* success state */
+  .done{display:none;padding:34px 28px 32px;text-align:center}
+  .ticket.sent form{display:none}
+  .ticket.sent .done{display:block;animation:fade .5s ease forwards}
+  .done-badge{width:84px;height:84px;margin:0 auto 18px;border-radius:50%;background:var(--blush);display:grid;place-items:center;animation:pop .6s cubic-bezier(.2,1.6,.4,1)}
+  @keyframes pop{from{transform:scale(.3)}to{transform:scale(1)}}
+  .done-badge svg{width:40px;height:40px;stroke:var(--magenta);fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40;stroke-dashoffset:40;animation:draw .6s .3s ease forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .done h3{font-family:var(--display);font-size:1.8rem;color:var(--plum);margin:0 0 8px;letter-spacing:-.02em}
+  .done p{margin:0 auto 20px;max-width:26em}
+  .summary{text-align:left;background:#FFF8FB;border:2px dashed var(--petal);border-radius:16px;padding:14px 18px;margin-bottom:20px;font-size:.95rem}
+  .summary div{display:flex;justify-content:space-between;gap:12px;padding:5px 0}
+  .summary b{color:var(--plum)}
+  .again{background:none;border:2px solid var(--plum);color:var(--plum);border-radius:999px;padding:10px 22px;font-weight:700;cursor:pointer;transition:background .2s,color .2s}
+  .again:hover{background:var(--plum);color:#fff}
+
+  /* ---------- Sections ---------- */
+  section.block{max-width:1200px;margin:0 auto;padding:90px 24px}
+  .block h2{font-family:var(--display);font-weight:800;font-size:clamp(2rem,4vw,3rem);letter-spacing:-.03em;color:var(--plum);margin:0 0 10px;line-height:1.05}
+  .block .sub{max-width:36em;margin:0 0 40px}
+
+  .routes{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+  .rcard{position:relative;background:#fff;border-radius:22px;padding:22px;border:2px solid transparent;cursor:pointer;text-align:left;transition:border-color .25s,transform .25s}
+  .rcard:hover{border-color:var(--rose);transform:translateY(-4px)}
+  .rcard .codes{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:1.7rem;color:var(--plum);letter-spacing:-.02em}
+  .rcard .codes svg{width:20px;height:20px;fill:var(--rose);transition:transform .35s}
+  .rcard:hover .codes svg{transform:translateX(6px)}
+  .rcard .names{font-size:.95rem;margin:4px 0 14px}
+  .rcard .meta{display:flex;justify-content:space-between;align-items:center;font-size:.88rem}
+  .rcard .meta em{font-style:normal;background:var(--blush);color:var(--magenta);font-weight:700;padding:4px 10px;border-radius:999px}
+  .rcard .pick{font-weight:700;color:var(--magenta)}
+
+  .steps-wrap{background:var(--plum);color:#FBDCE8;border-radius:36px;margin:0 24px}
+  .steps-wrap .block h2{color:#fff}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;counter-reset:s}
+  .step{counter-increment:s;padding-top:20px;border-top:2px solid rgba(255,201,220,.25)}
+  .step::before{content:counter(s);display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--rose);color:#fff;font-family:var(--display);font-weight:800;font-size:1.2rem;margin-bottom:16px}
+  .step h3{font-family:var(--display);color:#fff;font-size:1.3rem;margin:0 0 6px;letter-spacing:-.01em}
+  .step p{margin:0}
+
+  details{background:#fff;border-radius:18px;padding:0 22px;margin-bottom:12px;transition:background .2s}
+  summary{list-style:none;cursor:pointer;padding:18px 0;font-weight:700;color:var(--plum);display:flex;justify-content:space-between;align-items:center;gap:16px}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";font-size:1.5rem;color:var(--rose);transition:transform .3s;line-height:1}
+  details[open] summary::after{transform:rotate(45deg)}
+  details p{margin:0;padding:0 0 18px}
+
+  footer{text-align:center;padding:40px 24px 50px;font-size:.9rem}
+  footer .logo{justify-content:center;margin-bottom:8px}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* ---------- Real photos: hero ---------- */
+  .sky{z-index:1}
+  .hero-photo{position:absolute;inset:0;z-index:0;overflow:hidden;background:linear-gradient(135deg,#FFD3E2,#FF9DBF)}
+  .hero-photo img{width:100%;height:100%;object-fit:cover;object-position:65% 40%;opacity:0;transition:opacity 1.4s ease;animation:kenburns 40s ease-in-out infinite alternate}
+  .hero-photo img.loaded{opacity:1}
+  @keyframes kenburns{from{transform:scale(1.03)}to{transform:scale(1.12) translateX(-2%)}}
+  .hero-photo::after{content:"";position:absolute;inset:0;background:
+    linear-gradient(90deg,rgba(255,240,245,.97) 0%,rgba(255,240,245,.9) 34%,rgba(255,214,229,.4) 62%,rgba(224,36,111,.16) 100%),
+    linear-gradient(0deg,#FFF0F5 0%,rgba(255,240,245,0) 38%)}
+
+  /* ticket with real cut-out notches (works over photos) */
+  .ticket-wrap{position:relative;filter:drop-shadow(0 26px 30px rgba(224,36,111,.3));opacity:0;transform:translateY(40px) rotate(1.5deg);animation:land 1s .35s cubic-bezier(.2,.8,.2,1) forwards}
+  .ticket{opacity:1;transform:none;animation:none;box-shadow:none;
+    -webkit-mask:radial-gradient(circle 14px at 0 var(--cut,140px),#0000 97%,#000) left/51% 100% no-repeat,radial-gradient(circle 14px at 100% var(--cut,140px),#0000 97%,#000) right/51% 100% no-repeat;
+    mask:radial-gradient(circle 14px at 0 var(--cut,140px),#0000 97%,#000) left/51% 100% no-repeat,radial-gradient(circle 14px at 100% var(--cut,140px),#0000 97%,#000) right/51% 100% no-repeat}
+  .perf::before,.perf::after{display:none}
+  .perf{margin:0 24px}
+
+  /* ---------- Views gallery ---------- */
+  .gallery{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:220px;grid-auto-flow:dense;gap:14px}
+  .tile{position:relative;margin:0;border-radius:22px;overflow:hidden;background:linear-gradient(135deg,#FFC9DC,#FF8FB5)}
+  .tile.big{grid-column:span 2;grid-row:span 2}
+  .tile.wide{grid-column:span 2}
+  .tile.tall{grid-row:span 2}
+  .tile.full{grid-column:1 / -1}
+  .tile img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:transform 1s cubic-bezier(.2,.8,.2,1),opacity .6s ease}
+  .tile img.loaded{opacity:1}
+  .tile.noimg img{display:none}
+  .tile:hover img{transform:scale(1.07)}
+  .tile .open{position:absolute;inset:0;width:100%;height:100%;background:none;border:0;cursor:zoom-in;z-index:1;border-radius:22px}
+  .tile figcaption{position:absolute;left:0;right:0;bottom:0;z-index:2;pointer-events:none;padding:48px 18px 16px;background:linear-gradient(0deg,rgba(59,13,44,.88),rgba(59,13,44,0));color:#fff;display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+  .tile h3{font-family:var(--display);font-size:1.15rem;margin:0;letter-spacing:-.01em;line-height:1.15}
+  .tile.big h3{font-size:1.7rem}
+  .tile p{margin:3px 0 0;font-size:.86rem;opacity:.85}
+  .tile:not(.big):not(.wide) p{display:none}
+  .tile .fly{pointer-events:auto;flex:none;border:0;background:#fff;color:var(--magenta);font-weight:700;font-size:.82rem;padding:8px 13px;border-radius:999px;cursor:pointer;transition:background .2s,color .2s,transform .2s}
+  .tile .fly:hover{background:var(--rose);color:#fff;transform:translateY(-2px)}
+
+  /* ---------- Lightbox ---------- */
+  .lb{position:fixed;inset:0;z-index:50;background:rgba(59,13,44,.95);display:grid;place-items:center;padding:calc(24px + env(safe-area-inset-top,0px)) 76px calc(24px + env(safe-area-inset-bottom,0px));opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+  .lb.open{opacity:1;visibility:visible}
+  .lb figure{margin:0;text-align:center;transform:scale(.95);transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+  .lb.open figure{transform:none}
+  .lb img{max-width:100%;max-height:76vh;border-radius:16px;display:block;margin:0 auto;background:#5A2747;min-height:120px}
+  .lb figcaption{color:#FBDCE8;margin-top:14px;font-size:.95rem}
+  .lb figcaption b{display:block;color:#fff;font-family:var(--display);font-size:1.3rem}
+  .lb figcaption a{color:#FFC9DC;font-size:.8rem}
+  .lb-btn{position:absolute;width:48px;height:48px;border-radius:50%;border:0;background:rgba(255,255,255,.14);color:#fff;font-size:1.6rem;line-height:1;cursor:pointer;display:grid;place-items:center;transition:background .2s}
+  .lb-btn:hover{background:var(--rose)}
+  .lb-close{top:calc(16px + env(safe-area-inset-top,0px));right:16px}
+  .lb-prev{left:16px;top:50%;transform:translateY(-50%)}
+  .lb-next{right:16px;top:50%;transform:translateY(-50%)}
+
+  .credits{max-width:760px;margin:16px auto 0;font-size:.74rem;opacity:.7;line-height:1.6}
+
+  @media (max-width:960px){
+    .hero-photo::after{background:linear-gradient(180deg,rgba(255,240,245,.93) 0%,rgba(255,240,245,.8) 40%,rgba(255,240,245,.5) 72%,#FFF0F5 100%)}
+    .hero-photo img{object-position:50% 30%}
+  }
+  @media (max-width:760px){
+    .gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:170px;gap:10px}
+    .tile figcaption{flex-direction:column;align-items:flex-start;padding:34px 12px 12px;gap:8px}
+    .tile h3,.tile.big h3{font-size:1.05rem}
+    .tile:not(.big) p{display:none}
+    .tile .fly{padding:6px 11px;font-size:.78rem}
+    .lb{padding:calc(70px + env(safe-area-inset-top,0px)) 12px calc(84px + env(safe-area-inset-bottom,0px))}
+    .lb-prev,.lb-next{top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:none}
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:960px){
+    .hero-in{grid-template-columns:1fr;gap:36px;padding:40px 18px 180px}
+    .hero-copy{padding-top:0}
+    .steps{grid-template-columns:1fr}
+    .nav-links a:not(.nav-cta){display:none}
+  }
+  @media (max-width:520px){
+    form{padding:20px 18px 24px}
+    .stub{padding:18px 18px 20px}
+    .perf{margin:0 12px}
+    .perf::before{left:-26px}.perf::after{right:-26px}
+    .row{grid-template-columns:1fr}
+    .places .row{grid-template-columns:1fr 1fr}
+    .route-line{width:64px}
+    .logo small{display:none}
+    .steps-wrap{margin:0 12px;border-radius:28px}
+    section.block{padding:70px 18px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
+    html{scroll-behavior:auto}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a href="#top" class="logo" aria-label="Air Taxi Nepal home">
+      <span class="logo-mark"><svg viewBox="0 0 24 24"><path d="M22 12 15 10.5 10 3H7.5l3 7.5L4 10 2 7.5H.5l1 4.5-1 4.5H2L4 14l6.5-.5-3 7.5H10l5-7.5z"/></svg></span>
+      <span>airtaxinepal<small>.org</small></span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#routes">Routes</a>
+      <a href="#views">Views</a>
+      <a href="#how">How it works</a>
+      <a href="#book" class="nav-cta">Book a flight</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="hero-photo" aria-hidden="true">
+      <img alt="" fetchpriority="high" onload="this.classList.add('loaded')"
+           src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Mt._Machhapuchchhre_%26_Phewa_Lake.jpg/1920px-Mt._Machhapuchchhre_%26_Phewa_Lake.jpg">
+    </div>
+    <!-- sky: clouds + plane flying a route -->
+    <svg class="sky" viewBox="0 0 1440 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g class="drift-a"><ellipse class="cloud" cx="220" cy="120" rx="70" ry="18"/><ellipse class="cloud" cx="260" cy="108" rx="40" ry="16"/></g>
+      <g class="drift-b"><ellipse class="cloud" cx="1180" cy="90" rx="80" ry="20"/><ellipse class="cloud" cx="1130" cy="78" rx="44" ry="16"/></g>
+      <g class="drift-a"><ellipse class="cloud" cx="760" cy="300" rx="60" ry="14" opacity=".6"/></g>
+      <path id="flightPath" d="M -80 560 C 260 420, 560 170, 900 210 S 1360 90, 1560 60" fill="none" stroke="#FFB3CC" stroke-width="2.5" stroke-dasharray="2 12" stroke-linecap="round"/>
+      <g>
+        <g transform="translate(-16,-16) scale(1.35)"><path d="M22 12 15 10.5 10 3H7.5l3 7.5L4 10 2 7.5H.5l1 4.5-1 4.5H2L4 14l6.5-.5-3 7.5H10l5-7.5z" fill="#E0246F"/></g>
+        <animateMotion dur="16s" repeatCount="indefinite" rotate="auto" keyPoints="0;1" keyTimes="0;1" calcMode="spline" keySplines=".45 0 .55 1"><mpath href="#flightPath"/></animateMotion>
+      </g>
+    </svg>
+
+    <div class="hero-in">
+      <div class="hero-copy">
+        <h1>
+          <span class="line"><span>Fly anywhere</span></span>
+          <span class="line"><span>in Nepal,</span></span>
+          <span class="line"><span>booked on WhatsApp.</span></span>
+        </h1>
+        <p class="lead">Tell us your route and travel date. We find a seat on a domestic flight and confirm your ticket with you on WhatsApp.</p>
+        <div class="trust">
+          <span>All domestic airports</span>
+          <span>Reply on WhatsApp</span>
+          <span>No payment to request</span>
+        </div>
+      </div>
+
+      <!-- Booking card -->
+      <div class="ticket-wrap">
+      <div class="ticket" id="book">
+        <div class="stub">
+          <div class="stub-top"><span>Booking request</span><span class="site">airtaxinepal.org</span></div>
+          <div class="route" aria-live="polite">
+            <div><div class="code" id="codeFrom">KTM</div><div class="city" id="cityFrom">Kathmandu</div></div>
+            <div class="route-line" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M22 12 15 10.5 10 3H7.5l3 7.5L4 10 2 7.5H.5l1 4.5-1 4.5H2L4 14l6.5-.5-3 7.5H10l5-7.5z"/></svg></div>
+            <div class="to"><div class="code" id="codeTo">PKR</div><div class="city" id="cityTo">Pokhara</div></div>
+          </div>
+        </div>
+        <div class="perf" aria-hidden="true"></div>
+
+        <form id="bookingForm" novalidate>
+          <div class="field" data-f="name">
+            <label for="name">Full name</label>
+            <input id="name" name="name" type="text" autocomplete="name" placeholder="As on your ID" maxlength="80">
+            <div class="err">Enter your full name.</div>
+          </div>
+
+          <div class="field" data-f="phone">
+            <label for="phone">WhatsApp number</label>
+            <div class="phone">
+              <input id="cc" name="cc" type="tel" value="+977" aria-label="Country code" maxlength="5">
+              <input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="98XXXXXXXX" maxlength="15">
+            </div>
+            <div class="err">Enter a valid WhatsApp number.</div>
+          </div>
+
+          <div class="places">
+            <div class="row">
+              <div class="field" data-f="from">
+                <label for="from">From</label>
+                <select id="from" name="from"></select>
+                <div class="err">Pick where you fly from.</div>
+              </div>
+              <div class="field" data-f="to">
+                <label for="to">To</label>
+                <select id="to" name="to"></select>
+                <div class="err">Pick a different destination.</div>
+              </div>
+            </div>
+            <button type="button" class="swap" id="swap" aria-label="Swap from and to">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/></svg>
+            </button>
+          </div>
+
+          <div class="row">
+            <div class="field" data-f="date">
+              <label for="date">Travel date</label>
+              <input id="date" name="date" type="date">
+              <div class="err">Pick today or a later date.</div>
+            </div>
+            <div class="field">
+              <label id="paxLabel">Passengers</label>
+              <div class="pax" role="group" aria-labelledby="paxLabel">
+                <button type="button" id="paxMinus" aria-label="Fewer passengers">−</button>
+                <output id="pax" aria-live="polite">1</output>
+                <button type="button" id="paxPlus" aria-label="More passengers">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="hp" aria-hidden="true"><label>Leave empty <input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>
+
+          <button type="submit" class="send" id="sendBtn">
+            <span id="sendText">Send booking request</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12 15 10.5 10 3H7.5l3 7.5L4 10 2 7.5H.5l1 4.5-1 4.5H2L4 14l6.5-.5-3 7.5H10l5-7.5z"/></svg>
+          </button>
+          <div class="form-msg" id="formMsg" role="alert"></div>
+          <p class="note">We reply on WhatsApp with flight times and fare. Nothing is charged now.</p>
+        </form>
+
+        <div class="done" id="done" tabindex="-1">
+          <div class="done-badge"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+          <h3>Request sent</h3>
+          <p>We’ll message you on WhatsApp at <b id="doneNum"></b> with available flights.</p>
+          <div class="summary" id="summary"></div>
+          <button type="button" class="again" id="again">Book another flight</button>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- Himalaya ridges -->
+    <svg class="mountains" viewBox="0 0 1440 260" preserveAspectRatio="none" aria-hidden="true">
+      <g class="ridge r1"><path d="M0 170 L120 110 L210 150 L330 60 L420 120 L520 40 L600 110 L700 70 L820 130 L930 50 L1040 120 L1150 80 L1260 140 L1360 90 L1440 120 V260 H0Z" fill="#FFC9DC"/>
+        <path d="M330 60 L355 78 L340 76 L322 84 L312 74Z M520 40 L548 62 L530 58 L512 68 L500 56Z M930 50 L958 72 L940 68 L920 76 L910 64Z" fill="#fff"/></g>
+      <g class="ridge r2"><path d="M0 210 L140 150 L260 190 L380 130 L520 190 L660 140 L780 195 L920 150 L1060 200 L1200 150 L1320 190 L1440 160 V260 H0Z" fill="#FF8FB5"/></g>
+      <g class="ridge r3"><path d="M0 240 L180 205 L360 235 L560 200 L760 240 L960 210 L1160 240 L1320 215 L1440 232 V260 H0Z" fill="#FFF0F5"/></g>
+    </svg>
+  </section>
+
+  <section class="block" id="routes">
+    <h2 class="reveal">Popular routes</h2>
+    <p class="sub reveal">Pick a route to fill in the booking form. Flight times are approximate and depend on aircraft and weather.</p>
+    <div class="routes" id="routeGrid"></div>
+  </section>
+
+  <section class="block" id="views">
+    <h2 class="reveal">Views from the window</h2>
+    <p class="sub reveal">Real photos of the places our domestic flights reach. Tap a photo to see it full size, or book the route straight from it.</p>
+    <div class="gallery" id="gallery"></div>
+  </section>
+
+  <div class="steps-wrap" id="how">
+    <section class="block">
+      <h2 class="reveal">How booking works</h2>
+      <p class="sub reveal">Three steps from request to boarding.</p>
+      <div class="steps">
+        <div class="step reveal"><h3>Send your request</h3><p>Fill in your name, WhatsApp number, route and travel date. It takes under a minute.</p></div>
+        <div class="step reveal"><h3>Get options on WhatsApp</h3><p>We check seats across domestic airlines and send you flight times and fares to choose from.</p></div>
+        <div class="step reveal"><h3>Pay and fly</h3><p>Confirm your flight, complete payment, and receive your e-ticket on WhatsApp.</p></div>
+      </div>
+    </section>
+  </div>
+
+</main>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo viewer" aria-hidden="true">
+  <button type="button" class="lb-btn lb-close" id="lbClose" aria-label="Close photo">×</button>
+  <button type="button" class="lb-btn lb-prev" id="lbPrev" aria-label="Previous photo">‹</button>
+  <figure>
+    <img id="lbImg" alt="">
+    <figcaption><b id="lbTitle"></b><span id="lbText"></span><br><a id="lbCredit" target="_blank" rel="noopener"></a></figcaption>
+  </figure>
+  <button type="button" class="lb-btn lb-next" id="lbNext" aria-label="Next photo">›</button>
+</div>
+
+<footer>
+  <a href="#top" class="logo">
+    <span class="logo-mark"><svg viewBox="0 0 24 24"><path d="M22 12 15 10.5 10 3H7.5l3 7.5L4 10 2 7.5H.5l1 4.5-1 4.5H2L4 14l6.5-.5-3 7.5H10l5-7.5z"/></svg></span>
+    <span>airtaxinepal<small>.org</small></span>
+  </a>
+  <div>Domestic flight tickets across Nepal · © <span id="yr"></span> Air Taxi Nepal</div>
+  <p class="credits" id="credits"></p>
+</footer>
+
+<script>
+/* =========================================================
+   TELEGRAM SETTINGS — fill these in
+   Option A (simple): put BOT_TOKEN and CHAT_ID here.
+     Note: anyone can read them in the page source.
+   Option B (safer, works with GitHub Pages): deploy
+     telegram-worker.js on Cloudflare Workers (free), then put
+     the worker URL in PROXY_URL and leave BOT_TOKEN empty.
+   ========================================================= */
+const CONFIG = {
+  BOT_TOKEN: "PASTE_YOUR_BOT_TOKEN_HERE",
+  CHAT_ID:   "PASTE_YOUR_CHAT_ID_HERE",
+  PROXY_URL: ""   // e.g. "https://airtaxi-telegram.yourname.workers.dev"
+};
+
+const AIRPORTS = [
+  ["KTM","Kathmandu"],["PKR","Pokhara"],["BHR","Bharatpur"],["BIR","Biratnagar"],
+  ["BDP","Bhadrapur"],["JKR","Janakpur"],["SIF","Simara"],["BWA","Bhairahawa"],
+  ["KEP","Nepalgunj"],["DHI","Dhangadhi"],["SKH","Surkhet"],["RJB","Rajbiraj"],
+  ["TMI","Tumlingtar"],["LUA","Lukla"],["RHP","Ramechhap"],["JMO","Jomsom"],
+  ["JUM","Jumla"],["IMK","Simikot"],["DOP","Dolpa"],["TPJ","Taplejung"]
+];
+const ROUTES = [
+  ["KTM","PKR","about 25 min","Lakes & Annapurna views"],
+  ["KTM","LUA","about 30 min","Gateway to Everest"],
+  ["KTM","BIR","about 40 min","Eastern Nepal"],
+  ["KTM","BWA","about 35 min","Near Lumbini"],
+  ["KTM","BHR","about 20 min","Chitwan safaris"],
+  ["KTM","KEP","about 55 min","Far-west hub"],
+  ["PKR","JMO","about 20 min","Mustang valley"],
+  ["KTM","DHI","about 75 min","Sudurpaschim"]
+];
+const name = c => (AIRPORTS.find(a => a[0] === c) || [c, c])[1];
+const $ = id => document.getElementById(id);
+
+/* populate selects */
+const fromSel = $("from"), toSel = $("to");
+AIRPORTS.forEach(([c,n]) => {
+  fromSel.add(new Option(`${n} (${c})`, c));
+  toSel.add(new Option(`${n} (${c})`, c));
+});
+fromSel.value = "KTM"; toSel.value = "PKR";
+
+/* live route header */
+function setCode(el, cityEl, code){
+  if (el.textContent === code) return;
+  el.classList.add("flip");
+  setTimeout(() => { el.textContent = code; cityEl.textContent = name(code); el.classList.remove("flip"); }, 180);
+}
+function updateRoute(){
+  setCode($("codeFrom"), $("cityFrom"), fromSel.value);
+  setCode($("codeTo"), $("cityTo"), toSel.value);
+}
+fromSel.addEventListener("change", () => { clearBad("from"); clearBad("to"); updateRoute(); });
+toSel.addEventListener("change", () => { clearBad("to"); updateRoute(); });
+
+$("swap").addEventListener("click", e => {
+  const b = e.currentTarget; b.classList.toggle("spin");
+  [fromSel.value, toSel.value] = [toSel.value, fromSel.value];
+  updateRoute();
+});
+
+/* date: no past dates */
+const today = (() => { const t = new Date(); t.setMinutes(t.getMinutes() - t.getTimezoneOffset()); return t.toISOString().slice(0,10); })();
+$("date").min = today;
+
+/* passengers */
+let pax = 1;
+const setPax = n => { pax = Math.min(9, Math.max(1, n)); $("pax").textContent = pax; };
+$("paxMinus").onclick = () => setPax(pax - 1);
+$("paxPlus").onclick = () => setPax(pax + 1);
+
+/* phone: digits only */
+$("phone").addEventListener("input", e => { e.target.value = e.target.value.replace(/\D/g, ""); clearBad("phone"); });
+$("cc").addEventListener("input", e => { let v = e.target.value.replace(/[^\d]/g, "").slice(0,4); e.target.value = "+" + v; });
+["name","date"].forEach(id => $(id).addEventListener("input", () => clearBad(id)));
+
+/* route cards */
+const grid = $("routeGrid");
+const plane = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12 15 10.5 10 3H7.5l3 7.5L4 10 2 7.5H.5l1 4.5-1 4.5H2L4 14l6.5-.5-3 7.5H10l5-7.5z"/></svg>';
+ROUTES.forEach(([f,t,dur,tag]) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "rcard reveal";
+  b.innerHTML = `<div class="codes">${f} ${plane} ${t}</div>
+    <div class="names">${name(f)} to ${name(t)} · ${tag}</div>
+    <div class="meta"><em>${dur}</em><span class="pick">Book this route</span></div>`;
+  b.onclick = () => {
+    fromSel.value = f; toSel.value = t; updateRoute(); clearBad("from"); clearBad("to");
+    $("book").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+    setTimeout(() => $("name").focus({ preventScroll: true }), 600);
+  };
+  grid.appendChild(b);
+});
+
+/* validation */
+function bad(f){ document.querySelector(`.field[data-f="${f}"]`).classList.add("bad"); }
+function clearBad(f){ const el = document.querySelector(`.field[data-f="${f}"]`); el && el.classList.remove("bad"); }
+function validate(){
+  let ok = true, first = null;
+  const mark = (f, el) => { bad(f); ok = false; first = first || el; };
+  if ($("name").value.trim().length < 2) mark("name", $("name"));
+  const digits = $("phone").value.replace(/\D/g, "");
+  const cc = $("cc").value.replace(/\D/g, "");
+  if (!cc || (cc === "977" ? !/^9\d{9}$/.test(digits) : (digits.length < 6 || digits.length > 14))) mark("phone", $("phone"));
+  if (fromSel.value === toSel.value) mark("to", toSel);
+  if (!$("date").value || $("date").value < today) mark("date", $("date"));
+  if (first) first.focus();
+  return ok;
+}
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+const prettyDate = v => new Date(v + "T00:00:00").toLocaleDateString("en-GB", { weekday:"short", day:"numeric", month:"short", year:"numeric" });
+
+async function sendToTelegram(d){
+  if (CONFIG.PROXY_URL) {
+    const r = await fetch(CONFIG.PROXY_URL, { method:"POST", headers:{ "Content-Type":"application/json" }, body: JSON.stringify(d) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || !j.ok) throw new Error("proxy");
+    return;
+  }
+  const waDigits = (d.cc + d.phone).replace(/\D/g, "");
+  const text =
+`✈️ <b>New booking request</b> · airtaxinepal.org
+
+👤 <b>Name:</b> ${esc(d.name)}
+📱 <b>WhatsApp:</b> ${esc(d.cc)} ${esc(d.phone)}
+💬 https://wa.me/${waDigits}
+🛫 <b>From:</b> ${esc(name(d.from))} (${esc(d.from)})
+🛬 <b>To:</b> ${esc(name(d.to))} (${esc(d.to)})
+📅 <b>Date:</b> ${esc(prettyDate(d.date))}
+👥 <b>Passengers:</b> ${d.pax}
+🕒 <b>Sent:</b> ${esc(new Date().toLocaleString("en-GB"))}`;
+  const r = await fetch(`https://api.telegram.org/bot${CONFIG.BOT_TOKEN}/sendMessage`, {
+    method:"POST", headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ chat_id: CONFIG.CHAT_ID, text, parse_mode:"HTML", disable_web_page_preview:true })
+  });
+  const j = await r.json().catch(() => ({}));
+  if (!j.ok) throw new Error(j.description || "telegram");
+}
+
+let lastSent = 0;
+$("bookingForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const msg = $("formMsg"); msg.classList.remove("show");
+  if ($("website").value) return;                       // bot trap
+  if (!validate()) return;
+  if (Date.now() - lastSent < 20000) { msg.textContent = "Request already sent. Wait a few seconds before sending again."; msg.classList.add("show"); return; }
+
+  const d = {
+    name: $("name").value.trim(), cc: $("cc").value, phone: $("phone").value,
+    from: fromSel.value, to: toSel.value, date: $("date").value, pax
+  };
+  const btn = $("sendBtn");
+  btn.classList.add("loading"); $("sendText").textContent = "Sending…";
+  try {
+    await sendToTelegram(d);
+    lastSent = Date.now();
+    $("doneNum").textContent = `${d.cc} ${d.phone}`;
+    $("summary").innerHTML = `
+      <div><span>Passenger</span><b>${esc(d.name)}</b></div>
+      <div><span>Route</span><b>${esc(name(d.from))} → ${esc(name(d.to))}</b></div>
+      <div><span>Date</span><b>${esc(prettyDate(d.date))}</b></div>
+      <div><span>Passengers</span><b>${d.pax}</b></div>`;
+    $("book").classList.add("sent");
+    $("done").focus({ preventScroll: true });
+  } catch (err) {
+    console.error(err);
+    msg.textContent = "Your request didn’t go through. Check your internet connection and try again.";
+    msg.classList.add("show");
+  } finally {
+    btn.classList.remove("loading"); $("sendText").textContent = "Send booking request";
+  }
+});
+
+$("again").onclick = () => {
+  $("book").classList.remove("sent");
+  $("bookingForm").reset(); $("cc").value = "+977";
+  fromSel.value = "KTM"; toSel.value = "PKR"; setPax(1); updateRoute();
+  $("name").focus();
+};
+
+/* ---------- Real photos (Wikimedia Commons, free licenses) ---------- */
+const commonsPage = file => `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(file.replace(/ /g, "_"))}`;
+const PHOTOS = [
+  { file:"Ama Dablam, Nepal.jpg", size:"big", title:"Ama Dablam, Everest region", text:"A short flight and trek from Kathmandu", route:["KTM","LUA"], cta:"Fly to Lukla", credit:"Vyacheslav Argenberg", small:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Ama_Dablam%2C_Nepal.jpg/1280px-Ama_Dablam%2C_Nepal.jpg", large:"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Ama_Dablam%2C_Nepal.jpg/1920px-Ama_Dablam%2C_Nepal.jpg" },
+  { file:"Reflection of the Annapurna Range on Phewa Lake.jpg", size:"wide", title:"Annapurna over Phewa Lake", text:"Morning in Pokhara", route:["KTM","PKR"], cta:"Fly to Pokhara", credit:"Wikimedia Commons", small:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Reflection_of_the_Annapurna_Range_on_Phewa_Lake.jpg/960px-Reflection_of_the_Annapurna_Range_on_Phewa_Lake.jpg", large:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Reflection_of_the_Annapurna_Range_on_Phewa_Lake.jpg/1920px-Reflection_of_the_Annapurna_Range_on_Phewa_Lake.jpg" },
+  { file:"RK 0602 00827 Lukla.jpg", size:"", title:"Lukla", text:"The view from the airport", route:["KTM","LUA"], cta:"Fly to Lukla", credit:"Reinhard Kraasch", small:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/RK_0602_00827_Lukla.jpg/960px-RK_0602_00827_Lukla.jpg", large:"https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/RK_0602_00827_Lukla.jpg/1280px-RK_0602_00827_Lukla.jpg" },
+  { file:"20110725 Budha eyes closeup Bodhnath Stupa Kathmandu Nepal.jpg", size:"", title:"Boudhanath, Kathmandu", text:"Where most journeys begin", route:["PKR","KTM"], cta:"Fly to Kathmandu", credit:"Ggia", small:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/20110725_Budha_eyes_closeup_Bodhnath_Stupa_Kathmandu_Nepal.jpg/960px-20110725_Budha_eyes_closeup_Bodhnath_Stupa_Kathmandu_Nepal.jpg", large:"https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/20110725_Budha_eyes_closeup_Bodhnath_Stupa_Kathmandu_Nepal.jpg/1920px-20110725_Budha_eyes_closeup_Bodhnath_Stupa_Kathmandu_Nepal.jpg" },
+  { file:"Sun Set over Phewa Lake.jpg", size:"full", title:"Sunset over Phewa Lake", text:"Evening on the lakeside in Pokhara", route:["KTM","PKR"], cta:"Fly to Pokhara", credit:"Sanu N", small:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Sun_Set_over_Phewa_Lake.jpg/960px-Sun_Set_over_Phewa_Lake.jpg", large:"https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Sun_Set_over_Phewa_Lake.jpg/1920px-Sun_Set_over_Phewa_Lake.jpg" }
+];
+
+function pickRoute(f, t){
+  $("book").classList.remove("sent");
+  fromSel.value = f; toSel.value = t; updateRoute(); clearBad("from"); clearBad("to");
+  $("book").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  setTimeout(() => $("name").focus({ preventScroll: true }), 650);
+}
+
+const gal = $("gallery");
+PHOTOS.forEach((p, i) => {
+  const f = document.createElement("figure");
+  f.className = `tile reveal ${p.size}`;
+  f.innerHTML = `<img alt="${esc(p.title)}" loading="lazy" decoding="async" src="${p.small}">
+    <button type="button" class="open" aria-label="View photo: ${esc(p.title)}"></button>
+    <figcaption><div><h3>${esc(p.title)}</h3><p>${esc(p.text)}</p></div><button type="button" class="fly">${esc(p.cta)}</button></figcaption>`;
+  const img = f.querySelector("img");
+  img.onload = () => img.classList.add("loaded");
+  img.onerror = () => f.classList.add("noimg");
+  f.querySelector(".open").onclick = () => openLb(i);
+  f.querySelector(".fly").onclick = () => pickRoute(...p.route);
+  gal.appendChild(f);
+});
+
+/* lightbox */
+const lb = $("lb"); let lbIndex = 0, lastFocus = null;
+const creditText = p => p.credit === "Wikimedia Commons" ? "Photo: Wikimedia Commons" : `Photo: ${p.credit}, Wikimedia Commons`;
+function showLb(i){
+  lbIndex = (i + PHOTOS.length) % PHOTOS.length;
+  const p = PHOTOS[lbIndex];
+  const im = $("lbImg");
+  im.src = p.small; im.alt = p.title;
+  const hi = new Image(); hi.onload = () => { if (PHOTOS[lbIndex] === p) im.src = p.large; }; hi.src = p.large;
+  $("lbTitle").textContent = p.title; $("lbText").textContent = p.text;
+  $("lbCredit").href = commonsPage(p.file); $("lbCredit").textContent = creditText(p);
+}
+function openLb(i){ lastFocus = document.activeElement; showLb(i); lb.classList.add("open"); lb.setAttribute("aria-hidden","false"); document.body.style.overflow = "hidden"; $("lbClose").focus(); }
+function closeLb(){ lb.classList.remove("open"); lb.setAttribute("aria-hidden","true"); document.body.style.overflow = ""; lastFocus && lastFocus.focus(); }
+$("lbClose").onclick = closeLb;
+$("lbPrev").onclick = () => showLb(lbIndex - 1);
+$("lbNext").onclick = () => showLb(lbIndex + 1);
+lb.addEventListener("click", e => { if (e.target === lb) closeLb(); });
+document.addEventListener("keydown", e => {
+  if (!lb.classList.contains("open")) return;
+  if (e.key === "Escape") closeLb();
+  if (e.key === "ArrowLeft") showLb(lbIndex - 1);
+  if (e.key === "ArrowRight") showLb(lbIndex + 1);
+});
+let tx = null;
+lb.addEventListener("touchstart", e => { tx = e.touches[0].clientX; }, { passive:true });
+lb.addEventListener("touchend", e => { if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) showLb(lbIndex + (dx < 0 ? 1 : -1)); tx = null; });
+
+/* photo credits (required by the photos' licenses) */
+const heroCredit = { file:"Mt. Machhapuchchhre & Phewa Lake.jpg", title:"Top banner", credit:"Wikimedia Commons" };
+$("credits").innerHTML = "Photos from Wikimedia Commons under free licenses: " +
+  [heroCredit, ...PHOTOS].map(p => `<a href="${commonsPage(p.file)}" target="_blank" rel="noopener">${esc(p.title)}</a> (${esc(p.credit)})`).join(", ") + ".";
+
+/* ticket notch position follows the stub height */
+const setCut = () => $("book").style.setProperty("--cut", document.querySelector(".stub").offsetHeight + "px");
+setCut(); addEventListener("resize", setCut);
+if (document.fonts) document.fonts.ready.then(setCut);
+
+/* scroll reveals */
+const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }), { threshold: .15 });
+document.querySelectorAll(".reveal").forEach((el, i) => { el.style.transitionDelay = (i % 4) * 70 + "ms"; io.observe(el); });
+
+/* pause SVG plane for reduced motion */
+if (matchMedia("(prefers-reduced-motion: reduce)").matches) document.querySelector(".sky").pauseAnimations();
+
+$("yr").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
