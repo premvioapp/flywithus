@@ -18,6 +18,7 @@ function explain(desc) {
   const d = String(desc || "");
   if (/unauthorized|not found/i.test(d) && !/chat/i.test(d)) return "Your BOT_TOKEN is wrong or was revoked. Copy the latest token from @BotFather and paste it at the top of this worker.";
   if (/chat not found/i.test(d)) return "Your CHAT_ID is wrong, or you never pressed Start in your bot. Open your bot in Telegram, press Start, then get YOUR ID from @userinfobot. Do not use the number at the start of the bot token.";
+  if (/send messages to the bot|can't send messages to bots/i.test(d)) return "Your CHAT_ID is the bot's own ID. Use YOUR personal ID instead: message your bot 'hi', then open this worker address with ?getid at the end to see it.";
   if (/blocked by the user/i.test(d)) return "You blocked the bot. Open it in Telegram, unblock it, and press Start.";
   if (/PASTE_YOUR/.test(d)) return "You haven't pasted your BOT_TOKEN and CHAT_ID at the top of this worker yet.";
   return d;
@@ -50,6 +51,21 @@ export default {
     if (req.method === "OPTIONS") return new Response(null, { headers: cors });
     if (req.method === "GET") {
       const url = new URL(req.url);
+      if (url.searchParams.has("getid")) {
+        if (BOT_TOKEN.startsWith("PASTE")) return new Response("Paste your BOT_TOKEN at the top of this worker first.", { headers: { "Content-Type": "text/plain; charset=utf-8" } });
+        const r = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getUpdates`).then(x => x.json()).catch(() => ({}));
+        if (!r.ok) return new Response("PROBLEM: " + explain(r.description || "Could not reach Telegram"), { status: 500, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+        const chats = new Map();
+        for (const u of r.result || []) {
+          const c = (u.message || u.edited_message || u.channel_post || u.my_chat_member || {}).chat;
+          if (c) chats.set(c.id, c.title || [c.first_name, c.last_name].filter(Boolean).join(" ") || c.username || "Unknown");
+        }
+        const list = [...chats].map(([id, n]) => `${n}:  ${id}`).join("\n");
+        return new Response(list
+          ? "People who messaged your bot recently:\n\n" + list + "\n\nCopy YOUR number and paste it as CHAT_ID at the top of this worker, then Deploy."
+          : "No messages found yet. Open your bot in Telegram, press Start, send 'hi', then reload this page.",
+          { headers: { "Content-Type": "text/plain; charset=utf-8" } });
+      }
       if (!url.searchParams.has("test")) {
         return new Response("Booking relay is running.\n\nTo send a test message to your Telegram, add ?test to the end of this address.", { headers: { "Content-Type": "text/plain; charset=utf-8" } });
       }
